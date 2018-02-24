@@ -1,0 +1,49 @@
+options nodate nonumber;
+proc print data=sasuser.admit (obs=15);
+title "listing of the cereal data set";
+run;
+
+proc means data=sasuser.admit maxdec=4;
+/*maxdec: maximum decimal point=4 */
+var weight;
+title 'decriptive statistics using proc means';
+run;
+
+proc means data=sasuser.admit maxdec=4 n mean median std var q1 q3;
+var weight;
+run;
+
+proc univariate data=sasuser.admit ;
+var weight;
+id id;
+histogram weight;
+run;
+
+data one;
+set sasuser.admit;
+dummy='1';
+run;
+
+proc boxplot data=one;
+plot weight*sex / boxstyle=schematic;
+/*plot analysis_var*group_var / boxstyle=schematic: default boxplot form that i've known, highest point that is 1.5IQR from the box*/
+run;
+
+proc univariate data=sasuser.admit;
+var weight;
+id id;
+probplot weight / normal (mu=est sigma=est
+color=blue w=4); 
+/*est reflects the value of the designated dataset */
+/*probplot : by using option 'normal' -> normal probability plot*/
+run;
+
+proc means data=sasuser.admit n mean stderr clm;
+var weight;
+run;
+
+
+proc univariate data=sasuser.admit mu0=150;
+/*hypothesis test*/
+var weight;
+run;
